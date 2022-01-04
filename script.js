@@ -16,7 +16,8 @@ let lettersGuessed = holdEmptySpaces; //for each turn, all the letters pressed w
 let startButton = document.querySelector("#start-game-button");
 let countdownDisplay = document.querySelector("#countdown-display");
 let wordGuessField = document.getElementById("word-guess-field");
-let timeMessage = document.querySelector("#time-message");
+let winDisplay = document.querySelector("#win-display");
+let lossDisplay = document.querySelector("#loss-display");
 let instructionMessage = document.querySelector("#instructions");
 
 
@@ -24,15 +25,36 @@ let instructionMessage = document.querySelector("#instructions");
 let wordBank = ["javascript", "obie", "bunnies", "turtles", "red", "green"];
 
 
-//event listener for the start button, when start button is clicked, then 2 differnt code blocks run. 
-startButton.addEventListener("click", playGame);
+//when the page loads, display any scores still held in local storage. 
+displayScores();
 
+function displayScores(){
+    //get the scores from local storage
+    winCount  = localStorage.getItem("wins");
+    lossCount  = localStorage.getItem("losses");
+
+    //if there was something in local storage, display it. Otherwise display 0. 
+    if (winCount){
+        winDisplay.textContent = winCount;
+    } else {
+        winDisplay.textContent = "0";
+    }
+
+    if (lossCount){
+        lossDisplay.textContent = lossCount;
+    } else {
+        lossDisplay.textContent = "0";
+    }
+}
 
 function playGame(){
     startCountdown(); //one block of code will start & display timer
     setAnswerField(); //the other block of code will start playing the game 
     instructionMessage.textContent = "Guess the letters by pressing them on your keyboard";
 }
+
+//event listener for the start button, when start button is clicked, then 2 differnt code blocks run. 
+startButton.addEventListener("click", playGame);
 
 //declare function for the timer counting down and rendering time left to screen
 function startCountdown(){
@@ -119,6 +141,7 @@ function gameOver(){
     console.log("Game Over!");
     lossCount++;
     wordGuessField.textContent = "Waa-waah. Sorry, you've lost.";
+    recordScore();
 
 }
 
@@ -127,17 +150,17 @@ function winning(){
     winCount++;
     wordGuessField.textContent = "Boom shackalacka. You've won.";
     win = true;
+    recordScore();
 
 }
 
+function recordScore(){
 
+    //record score to local storage
+    localStorage.setItem("wins", winCount);
+    localStorage.setItem("losses", lossCount);
 
-
-
-
-
-
-
-
+    displayScores();
+}
 
 
