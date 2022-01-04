@@ -3,6 +3,7 @@ let timer = 15;
 let winCount = 0;
 let lossCount = 0;
 let turns = 0;
+let win = false; //declare a boolean to check wins/losses. 
 
 //variables for arrays and words
 let currentWord = ""; //answer for current turn
@@ -16,6 +17,7 @@ let startButton = document.querySelector("#start-game-button");
 let countdownDisplay = document.querySelector("#countdown-display");
 let wordGuessField = document.getElementById("word-guess-field");
 let timeMessage = document.querySelector("#time-message");
+let instructionMessage = document.querySelector("#instructions");
 
 
 //declare array of possible answer word strings
@@ -29,6 +31,7 @@ startButton.addEventListener("click", playGame);
 function playGame(){
     startCountdown(); //one block of code will start & display timer
     setAnswerField(); //the other block of code will start playing the game 
+    instructionMessage.textContent = "Guess the letters by pressing them on your keyboard";
 }
 
 //declare function for the timer counting down and rendering time left to screen
@@ -40,10 +43,9 @@ function startCountdown(){
         timer--; //decrement time by 1 second every time the loop runs
         countdownDisplay.textContent = timer ; 
 
-        //if time is zero, then clear the interval
-        if(timer === 0) {  
+        //if time is zero and the user hasn't won the game yet, then clear the interval and run the game over function
+        if(timer === 0 && !win) {  
             clearInterval(timeLeft);
-            timeMessage.textContent = "Oops! Time's up!"; //display timeout message
             gameOver(); //call function to end the game. 
         } 
         }, 1000); // function runs once a second (1000 miliseconds)
@@ -124,6 +126,7 @@ function gameOver(){
 function winning(){
     winCount++;
     wordGuessField.textContent = "Boom shackalacka. You've won.";
+    win = true;
 
 }
 
